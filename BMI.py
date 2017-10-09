@@ -1,7 +1,12 @@
+#Written by Charles Zhu
+#Date: 10/8/2017
+#CSC325
+#Python Module
 import matplotlib.pyplot as plt
 import cmath
 
-data_file = open(r'C:\Users\Charles\Desktop\Dev\Python\body.dat.txt', "r")
+# Data from: http://ww2.amstat.org/publications/jse/jse_data_archive.htm
+data_file = open("body.dat.txt", "r")
 
 class person(object):
     def __init__(self, BiacromialDiameter, BiiliacDiameter, BitrochantericDiameter,
@@ -70,8 +75,6 @@ def calculate_BMI(person_array):
       BMI = (p.Weight / (height_inMeters**2))
       BMI_array.append(BMI)
   return BMI_array
-
-
 def calculate_leastSquaresLine(x_set, y_set):
     #x_set and y_set should be equal in length
     n = len(x_set)
@@ -94,9 +97,6 @@ def calculate_leastSquaresLine(x_set, y_set):
     result.append(intercept)
     # result[0] = slope | result[1] = intercept
     return result
-
-
-
 def calculate_correlation(x_set, y_set):
     n = len(x_set)
     sum_x = sum(x_set)
@@ -113,19 +113,16 @@ def calculate_correlation(x_set, y_set):
     #correlation formula
     corr = (n*sum_xy - (sum_x*sum_y)) / cmath.sqrt((n*sum_x2d - (sum_x)**2) * (n*sum_y2d - (sum_y)**2))
     return corr
-
 def get_Ages(people_array):
     Ages = []
     for p in people_array:
         Ages.append(p.Age)
     return Ages
-
 def get_Weights(people_array):
     Weights = []
     for p in people_array:
         Weights.append(p.Weight)
     return Weights
-
 def calculate_PhysAtr(people_array):
     PhysAtr_array = []
     for p in people_array:
@@ -141,54 +138,50 @@ def calculate_PhysAtr(people_array):
 
 #Graph 1  Data
 Graph1_BMI = calculate_BMI(people)
-print Graph1_BMI
 Graph1_Ages = get_Ages(people)
-print Graph1_Ages
 Graph1_leastSQ = calculate_leastSquaresLine(Graph1_BMI, Graph1_Ages)
-print Graph1_leastSQ[0]
-print Graph1_leastSQ[1]
 Graph1_slopeLine = []
 for i in range(int(max(Graph1_BMI))):
     Graph1_slopeLine.append(Graph1_leastSQ[1] + (Graph1_leastSQ[0]*i))
-
 Graph1_correlation = calculate_correlation(Graph1_BMI, Graph1_Ages)
-print Graph1_correlation
 
 #Graph 2 Data
 Graph2_Weight = get_Weights(people)
-print Graph2_Weight
 Graph2_PhysAtr = calculate_PhysAtr(people)
-print Graph2_PhysAtr
 Graph2_leastSQ = calculate_leastSquaresLine(Graph2_Weight, Graph2_PhysAtr)
-print Graph2_leastSQ[0]
-print Graph2_leastSQ[1]
 Graph2_slopeLine = []
 for i in range(int(max(Graph2_Weight))):
     Graph2_slopeLine.append(Graph2_leastSQ[1] + (Graph2_leastSQ[0]*i))
-
 Graph2_correlation = calculate_correlation(Graph2_Weight, Graph2_PhysAtr)
-print Graph2_correlation
+
 
 #plot Graph 1
 #plot data
 plt.plot(Graph1_BMI, Graph1_Ages, '.')
 #plot fit line
 plt.plot(Graph1_slopeLine)
+#Add text
 plt.xlabel('BMI')
 plt.ylabel('Age')
+plt.title("BMI vs. Age")
 plt.text(0, max(Graph1_Ages), 'Slope: ' + str(Graph1_leastSQ[0]), fontdict=None, withdash=False)
 plt.text(0, max(Graph1_Ages) - 5, 'Y-intercept: ' + str(Graph1_leastSQ[1]), fontdict=None, withdash=False)
 plt.text(0, max(Graph1_Ages) - 10, 'Correlation: ' + str(Graph1_correlation), fontdict=None, withdash=False)
 
+#start new figure
 plt.figure()
+
 #plot Graph 2
 plt.plot(Graph2_Weight, Graph2_PhysAtr, '.')
 #plot fit line
 plt.plot(Graph2_slopeLine)
+#Add text
 plt.xlabel('Weight')
 plt.ylabel('PhysAtr')
+plt.title("Weight vs. Physical Attributes Value")
 plt.text(0, max(Graph2_PhysAtr), 'Slope: ' + str(Graph2_leastSQ[0]), fontdict=None, withdash=False)
 plt.text(0, max(Graph2_PhysAtr) - 5, 'Y-intercept: ' + str(Graph2_leastSQ[1]), fontdict=None, withdash=False)
 plt.text(0, max(Graph2_PhysAtr) - 10, 'Correlation: ' + str(Graph2_correlation), fontdict=None, withdash=False)
 
+#show the finished figures
 plt.show()
